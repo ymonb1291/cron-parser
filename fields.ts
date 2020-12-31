@@ -1,6 +1,7 @@
 import { Config } from "./config.ts";
 import { Ranges } from "./ranges.ts";
 import {
+  createInterval,
   findKey,
   removeUndefined,
   sortNumericArrayASC,
@@ -114,17 +115,6 @@ export class Fields
     this.parse(expression, config);
   }
 
-  /** Creates an interval of values */
-  private createInterval(min: number, max: number): number[] {
-    const res: number[] = [];
-
-    for (let i = min; i < max + 1; i++) {
-      res.push(i);
-    }
-
-    return res;
-  }
-
   /** Creates an interval of value by steps */
   private createSteps(fragment: string, min: number, max: number): number[] {
     const [, prefix, stepSize] = fragment.match(
@@ -135,11 +125,11 @@ export class Fields
       const [, matchedMin, matchedMax] = fragment.match(
         /(\d+)-(\d+)/,
       ) as RegExpMatchArray;
-      population = this.createInterval(Number(matchedMin), Number(matchedMax));
+      population = createInterval(Number(matchedMin), Number(matchedMax));
     } else if (prefix === "*") {
-      population = this.createInterval(min, max);
+      population = createInterval(min, max);
     } else {
-      population = this.createInterval(Number(prefix), max);
+      population = createInterval(Number(prefix), max);
     }
 
     return population
@@ -204,7 +194,7 @@ export class Fields
           const [, matchedMin, matchedMax] = fragment.match(
             /(\d+)-(\d+)/,
           ) as RegExpMatchArray;
-          return this.createInterval(Number(matchedMin), Number(matchedMax));
+          return createInterval(Number(matchedMin), Number(matchedMax));
         }
         return [Number(fragment)];
       })
@@ -324,7 +314,7 @@ export class Fields
     // then we need to return the min-max interval
     if (!field.length || field[0] === "*") {
       this.wildcards.push(label);
-      return this.createInterval(min, max);
+      return createInterval(min, max);
     }
 
     // The field contains lists, ranges or steps

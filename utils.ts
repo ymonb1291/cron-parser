@@ -1,3 +1,22 @@
+  /** Creates an interval of values */
+  /**
+   * Creates an interval of values
+   * @param lbound Lower boundary
+   * @param ubound Upper boundary
+   * ```
+   * createInterval(4, 8); // Returns: [4, 5, 6, 7, 8]
+   * ```
+   */
+  export function createInterval(lbound: number, ubound: number): number[] {
+    const res: number[] = [];
+
+    for (let i = lbound; i < ubound + 1; i++) {
+      res.push(i);
+    }
+
+    return res;
+  }
+
 /**
  * Predicate function for Array.prototype.filter() to remove duplicates
  * @param value element of the array

@@ -1,5 +1,6 @@
 import { Rhum } from "./deps_test.ts";
 import {
+  createInterval,
   findKey,
   removeUndefined,
   sortNumericArrayASC,
@@ -7,6 +8,21 @@ import {
 } from "./utils.ts";
 
 Rhum.testPlan("utils_test.ts", () => {
+  Rhum.testSuite("createInterval", () => {
+    Rhum.testCase("Returns an interval of number as an array", () => {
+      const expect = [1,2,3];
+      const result = createInterval(1, 3);
+
+      Rhum.asserts.assertEquals(result, expect);
+    });
+
+    Rhum.testCase("Returns undefined when no match", () => {
+      const expect = void 0;
+      const result = findKey({ a: "A", b: "B" }, "C");
+
+      Rhum.asserts.assertEquals(result, expect);
+    });
+  });
   Rhum.testSuite("findKey", () => {
     Rhum.testCase("Returns the key when match", () => {
       const expect = "b";
