@@ -102,6 +102,8 @@ export class Fields
    */
   public dow: number[] | string = [];
 
+  public wildcards: Label[] = [];
+
   /** Array that contains all possible values for years */
   public year: number[] = [];
 
@@ -318,6 +320,7 @@ export class Fields
     // The first fragment of the field is * or there is no fragment at all
     // then we need to return the min-max interval
     if (!field.length || field[0] === "*") {
+      this.wildcards.push(label);
       return this.createInterval(min, max);
     }
 
