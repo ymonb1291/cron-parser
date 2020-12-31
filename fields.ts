@@ -191,6 +191,7 @@ export class Fields
    * all possible values in an array
    */
   private loopThroughFragments(
+    label: Label,
     field: string[],
     min: number,
     max: number,
@@ -208,6 +209,10 @@ export class Fields
         return [Number(fragment)];
       })
       .flat()
+      .map(value => {
+        if(label === "dow" && value === 7) return 0
+        return value;
+      })
       .filter(unique)
       .sort(sortNumericArrayASC);
   }
@@ -295,8 +300,6 @@ export class Fields
     for (const [label, field] of Object.entries(mappedFields)) {
       this.parseField(label as Label, field, config);
     }
-
-    this.dow = this.replaceDow7(this.dow);
   }
 
   /** Parses fields which are not enhanced  */
@@ -325,7 +328,7 @@ export class Fields
     }
 
     // The field contains lists, ranges or steps
-    return this.loopThroughFragments(field, min, max);
+    return this.loopThroughFragments(label, field, min, max);
   }
 
   /**
@@ -345,17 +348,6 @@ export class Fields
 
       return fragment;
     });
-  }
-
-  /** Takes an array and replaces the value 7 by 0 */
-  private replaceDow7(parsedField: number[] | string): number[] | string {
-    if (Array.isArray(parsedField)) {
-      return parsedField
-        .map((value) => value === 7 ? 0 : value)
-        .filter(unique)
-        .sort(sortNumericArrayASC);
-    }
-    return parsedField;
   }
 
   /** TODO */
